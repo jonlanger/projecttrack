@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width= 100%, initial-scale=1.0">
+    <title>User Journey Map</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {},
+            },
+            plugins: [daisyui],
+            daisyui: {
+                themes: ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine"],
+            },
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html, body {
+            height: auto;
+            margin: 0;
+            background-color: #f3f4f6;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 100%;
+            padding: 16px;
+            margin: 0 auto;
+            flex-grow: 1;
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .chart-card {
+            min-width: 25vw;
+            flex-grow: 1;
+            height: auto;
+            max-height: 60vh;
+            border-radius: 16px;
+            padding-bottom: 50px; /* Ensure enough space for labels */
+        }
+        .chart-canvas {
+            height: calc(100% - 24px); /* Adjust height to account for padding */
+            border-radius: 16px;
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .chart-wrapper {
+            flex-grow: 1;
+            min-width: 25vw;
+        }
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .dropdown-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .uploaded-image {
+            margin-top: 16px;
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar bg-base-100 mb-4">
+            <h1 id="main-title" contenteditable="true" class="btn btn-ghost text-4xl lg:text-5xl">Project Title</h1>
+            <div class="flex-1 flex justify-end space-x-2">
+                <input type="text" id="search-bar" placeholder="Search..." class="input input-bordered w-full max-w-xs">
+                <select id="theme-selector" class="select select-bordered w-full max-w-xs">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="cupcake">Cupcake</option>
+                    <option value="bumblebee">Bumblebee</option>
+                    <option value="emerald">Emerald</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="synthwave">Synthwave</option>
+                    <option value="retro">Retro</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                    <option value="valentine">Valentine</option>
+                </select>
+                <button id="add-section" class="btn btn-primary">Add Section</button>
+                <button id="toggle-stats" class="btn btn-info">Stats</button>
+                <button id="toggle-charts" class="btn btn-info">Charts</button>
+            </div>
+        </div>
+        <div id="stats-card" class="hidden mb-6">
+            <div class="stats stats-vertical lg:stats-horizontal shadow flex-wrap">
+                <div class="stat cursor-pointer filter-stat" data-filter="Critical">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Critical</div>
+                    <div class="stat-value" id="critical-count">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="High">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">High</div>
+                    <div class="stat-value" id="high-count">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="Low">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Low</div>
+                    <div class="stat-value" id="low-count">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="Immediate">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Immediate</div>
+                    <div class="stat-value" id="immediate-count">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="totalCards">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Total Cards</div>
+                    <div class="stat-value" id="total-cards">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="totalRanges">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Total Ranges</div>
+                    <div class="stat-value" id="total-ranges">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="completed">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Completed</div>
+                    <div class="stat-value" id="completed-count">0</div>
+                </div>
+                <div class="stat cursor-pointer filter-stat" data-filter="archived">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Archived</div>
+                    <div class="stat-value" id="archived-count">0</div>
+                </div>
+            </div>
+        </div>
+        <div id="charts-card" class="hidden mb-6">
+            <div class="card shadow-md p-4">
+                <div class="flex flex-wrap justify-between items-center mb-4">
+                    <select id="data-field-selector" class="select select-bordered w-full max-w-xs mb-2 sm:mb-0">
+                        <option value="overview">Overview</option>
+                        <option value="critical">Critical</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="immediate">Immediate</option>
+                        <option value="topPriority">Top Priority</option>
+                        <option value="medium">Medium</option>
+                        <option value="important">Important</option>
+                        <option value="low">Low</option>
+                        <option value="nonUrgent">Non-Urgent</option>
+                        <option value="deferred">Deferred</option>
+                        <option value="totalCards">Total Cards</option>
+                        <option value="totalRanges">Total Ranges</option>
+                        <option value="completed">Completed</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                    <button id="add-chart" class="btn btn-primary ml-0 sm:ml-4 w-full sm:w-auto">Add Chart</button>
+                </div>
+                <div id="chart-container" class="chart-container">
+                    <!-- Default overview chart will be added here -->
+                </div>
+            </div>
+        </div>
+        <div id="journey-map" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Sections will be dynamically added here -->
+        </div>
+    </div>
+    <script>
+        const priorityColors = {
+            'Critical': 'btn-error',
+            'High': 'btn-warning',
+            'Urgent': 'btn-accent',
+            'Immediate': 'btn-primary',
+            'Top Priority': 'btn-info',
+            'Medium': 'btn-secondary',
+            'Important': 'btn-success',
+            'Low': 'btn-danger',
+            'Non-Urgent': 'btn-ghost',
+            'Deferred': 'btn-outline'
+        };
+
+        const updateStats = () => {
+            const sections = document.querySelectorAll('#journey-map .card');
+            const stats = {
+                'Critical': 0,
+                'High': 0,
+                'Urgent': 0,
+                'Immediate': 0,
+                'totalCards': sections.length,
+                'totalRanges': 0,
+                'Completed': 0,
+                'Archived': 0,
+            };
+
+            sections.forEach(section => {
+                const priority = section.querySelector('.priority-btn').getAttribute('data-priority');
+                const ranges = section.querySelectorAll('.range-container > div').length;
+                if (priority in stats) {
+                    stats[priority]++;
+                }
+                stats['totalRanges'] += ranges;
+                if (section.classList.contains('completed')) {
+                    stats['Completed']++;
+                }
+                if (section.classList.contains('archived')) {
+                    stats['Archived']++;
+                }
+            });
+
+            document.getElementById('critical-count').textContent = stats['Critical'];
+            document.getElementById('high-count').textContent = stats['High'];
+            document.getElementById('urgent-count').textContent = stats['Urgent'];
+            document.getElementById('immediate-count').textContent = stats['Immediate'];
+            document.getElementById('total-cards').textContent = stats['totalCards'];
+            document.getElementById('total-ranges').textContent = stats['totalRanges'];
+            document.getElementById('completed-count').textContent = stats['Completed'];
+            document.getElementById('archived-count').textContent = stats['Archived'];
+
+            // Update the overview chart if it exists
+            const overviewChart = document.querySelector('.chart-card[data-field="overview"]');
+            if (overviewChart) {
+                updateChart('overview', overviewChart.querySelector('canvas'));
+            }
+        };
+
+        const addSection = (title = 'New Section', startDate = '', endDate = '', priority = 'Critical') => {
+            const journeyMap = document.getElementById('journey-map');
+            const section = document.createElement('div');
+            section.classList.add('card', 'bg-base-100', 'shadow-md', 'p-4', 'relative', 'space-y-4', 'mb-6');
+            section.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div contenteditable="true" class="text-2xl font-semibold">${title}</div>
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-xs btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>
+                        </label>
+                        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <li><a href="#" class="mark-complete">Mark as Complete</a></li>
+                            <li><a href="#" class="archive">Archive</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 min-w-[45%] mb-4">
+                        <label class="label">
+                            <span class="label-text">Start Date</span>
+                        </label>
+                        <input type="date" class="input input-bordered w-full start-date" value="${startDate}">
+                    </div>
+                    <div class="flex-1 min-w-[45%] mb-4">
+                        <label class="label">
+                            <span class="label-text">End Date</span>
+                        </label>
+                        <input type="date" class="input input-bordered w-full end-date" value="${endDate}">
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn ${priorityColors[priority]} w-full dropdown-toggle priority-btn" data-priority="${priority}">
+                        ${priority}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10l4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul class="dropdown-content menu bg-base-100 rounded-box w-full p-2 shadow">
+                        ${Object.keys(priorityColors).map(key => `
+                            <li><a href="#" class="priority-option" data-priority="${key}">${key}</a></li>
+                        `).join('')}
+                    </ul>
+                </div>
+                <div class="badge-container"></div>
+                <div class="uploaded-images-container"></div>
+                <button class="btn btn-ghost btn-xs add-details-btn w-full">Add Details</button>
+                <div class="details-content hidden">
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Description</span>
+                        </div>
+                        <textarea class="textarea textarea-bordered w-full" placeholder="Type here"></textarea>
+                    </label>
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Tags</span>
+                        </div>
+                        <input type="text" class="input input-bordered w-full" placeholder="Type here">
+                    </label>
+                    <input type="file" class="file-input file-input-ghost file-input-xs w-full max-w-xs file-selector mt-2" multiple />
+                </div>
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-title">Inputs & Ranges</div>
+                        <div class="stat-value input-range-count">0</div>
+                    </div>
+                </div>
+                <div class="range-container space-y-4">
+                    <!-- Additional input and range components will be added here -->
+                </div>
+                <button class="btn btn-outline btn-sm add-range">Add Input & Range</button>
+                <button class="btn btn-ghost btn-sm remove-section">Delete Section</button>
+            `;
+            journeyMap.appendChild(section);
+
+            const priorityBtn = section.querySelector('.priority-btn');
+            const priorityOptions = section.querySelectorAll('.priority-option');
+            const addDetailsBtn = section.querySelector('.add-details-btn');
+            const detailsContent = section.querySelector('.details-content');
+            const fileSelector = section.querySelector('.file-selector');
+            const uploadedImagesContainer = section.querySelector('.uploaded-images-container');
+            const inputRangeCount = section.querySelector('.input-range-count');
+            const tagInput = section.querySelector('.tag-input');
+
+            const updateChartForField = () => {
+                const field = document.getElementById('data-field-selector').value;
+                const chartWrapper = document.querySelector(`.chart-card[data-field="${field}"]`);
+                if (chartWrapper) {
+                    const chartCanvas = chartWrapper.querySelector('canvas');
+                    updateChart(field, chartCanvas);
+                }
+            };
+
+            priorityOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const newPriority = option.getAttribute('data-priority');
+                    priorityBtn.textContent = newPriority;
+                    priorityBtn.className = `btn w-full dropdown-toggle priority-btn ${priorityColors[newPriority]}`;
+                    priorityBtn.setAttribute('data-priority', newPriority);
+                    updateStats();
+                    updateChartForField();
+                });
+            });
+
+            const updateInputRangeCount = () => {
+                const count = section.querySelectorAll('.range-container > div').length;
+                inputRangeCount.textContent = count;
+                updateStats();
+                updateChartForField();
+            };
+
+            addDetailsBtn.addEventListener('click', function() {
+                detailsContent.classList.toggle('hidden');
+            });
+
+            fileSelector.addEventListener('change', function() {
+                const files = this.files;
+                uploadedImagesContainer.innerHTML = ''; // Clear previous images
+                for (const file of files) {
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = 'Uploaded Image';
+                            img.className = 'uploaded-image w-full';
+                            uploadedImagesContainer.appendChild(img);
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                }
+                updateChartForField();
+            });
+
+            section.querySelector('.start-date').addEventListener('change', updateChartForField);
+            section.querySelector('.end-date').addEventListener('change', updateChartForField);
+            tagInput.addEventListener('input', updateChartForField);
+
+            section.querySelector('.remove-section').addEventListener('click', function() {
+                journeyMap.removeChild(section);
+                updateStats();
+                updateChartForField();
+            });
+
+            section.querySelector('.add-range').addEventListener('click', function() {
+                const rangeContainer = section.querySelector('.range-container');
+                const rangeComponent = document.createElement('div');
+                rangeComponent.classList.add('space-y-2');
+                rangeComponent.innerHTML = `
+                    <input type="text" class="input input-bordered w-full" placeholder="New Input" />
+                    <div>
+                        <input type="range" min="0" max="100" value="25" class="range" step="25" />
+                        <div class="flex w-full justify-between px-2 text-xs">
+                            <span>|</span>
+                            <span>|</span>
+                            <span>|</span>
+                            <span>|</span>
+                            <span>|</span>
+                        </div>
+                    </div>
+                `;
+                rangeContainer.appendChild(rangeComponent);
+                updateInputRangeCount();
+            });
+
+            section.querySelector('.mark-complete').addEventListener('click', function() {
+                section.classList.add('completed');
+                section.style.display = 'none';
+                updateStats();
+                updateChartForField();
+            });
+
+            section.querySelector('.archive').addEventListener('click', function() {
+                section.classList.add('archived');
+                section.style.display = 'none';
+                updateStats();
+                updateChartForField();
+            });
+
+            updateInputRangeCount();
+        };
+
+        document.getElementById('add-section').addEventListener('click', function() {
+            addSection();
+        });
+
+        document.getElementById('theme-selector').addEventListener('change', function() {
+            document.documentElement.setAttribute('data-theme', this.value);
+        });
+
+        document.getElementById('search-bar').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const sections = document.querySelectorAll('#journey-map .card');
+
+            sections.forEach(section => {
+                const tags = section.querySelector('.tag-input').value.toLowerCase();
+                const inputs = Array.from(section.querySelectorAll('.input')).map(input => input.value.toLowerCase());
+                const priority = section.querySelector('.priority-btn').getAttribute('data-priority').toLowerCase();
+                const ratings = section.querySelector('.input-range-count').textContent;
+
+                const matchesTags = tags.includes(query);
+                const matchesInputs = inputs.some(input => input.includes(query));
+                const matchesPriority = priority.includes(query);
+                const matchesRatings = ratings.includes(query);
+
+                if (matchesTags || matchesInputs || matchesPriority || matchesRatings) {
+                    section.style.display = '';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+
+        document.querySelectorAll('.filter-stat').forEach(stat => {
+            stat.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                const sections = document.querySelectorAll('#journey-map .card');
+
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                    this.querySelector('svg').outerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    `;
+                    sections.forEach(section => {
+                        section.style.display = '';
+                    });
+                } else {
+                    document.querySelectorAll('.filter-stat.active').forEach(activeStat => {
+                        activeStat.classList.remove('active');
+                        activeStat.querySelector('svg').outerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        `;
+                    });
+                    this.classList.add('active');
+                    this.querySelector('svg').outerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    `;
+                    sections.forEach(section => {
+                        if (filter === 'totalCards') {
+                            section.style.display = '';
+                        } else if (filter === 'totalRanges') {
+                            section.style.display = section.querySelectorAll('.range-container > div').length > 0 ? '' : 'none';
+                        } else {
+                            section.style.display = section.querySelector(`.priority-btn[data-priority="${filter}"]`) ? '' : 'none';
+                        }
+                    });
+                }
+            });
+        });
+
+        document.getElementById('toggle-stats').addEventListener('click', function() {
+            const statsCard = document.getElementById('stats-card');
+            statsCard.classList.toggle('hidden');
+            updateStats();
+        });
+
+        document.getElementById('toggle-charts').addEventListener('click', function() {
+            const chartsCard = document.getElementById('charts-card');
+            chartsCard.classList.toggle('hidden');
+        });
+
+        const updateChart = (field, chartCanvas) => {
+            let chartData = [];
+            let labels = [];
+
+            const sections = document.querySelectorAll('#journey-map .card');
+            sections.forEach(section => {
+                const priority = section.querySelector('.priority-btn').getAttribute('data-priority').toLowerCase();
+                const startDate = section.querySelector('.start-date').value;
+                const endDate = section.querySelector('.end-date').value;
+
+                if (field === priority || field === 'totalCards' || field === 'totalRanges' || field === 'completed' || field === 'archived') {
+                    chartData.push({
+                        startDate,
+                        endDate,
+                        value: field === 'totalRanges' ? section.querySelectorAll('.range-container > div').length : 1
+                    });
+                } else if (field === 'overview') {
+                    chartData.push({
+                        type: priority,
+                        value: 1
+                    });
+                }
+            });
+
+            if (field === 'overview') {
+                const types = ['critical', 'high', 'urgent', 'immediate', 'topPriority', 'medium', 'important', 'low', 'nonUrgent', 'deferred'];
+                labels = types.map(type => type.charAt(0).toUpperCase() + type.slice(1));
+                chartData = labels.map(label => chartData.filter(d => d.type === label.toLowerCase()).length);
+            } else {
+                labels = [...new Set(chartData.map(data => data.startDate + ' to ' + data.endDate))];
+                chartData = labels.map(label => chartData.filter(d => (d.startDate + ' to ' + d.endDate) === label).reduce((acc, curr) => acc + curr.value, 0));
+            }
+
+            const chartConfig = {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: field.charAt(0).toUpperCase() + field.slice(1),
+                        data: chartData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            try {
+                new Chart(chartCanvas, chartConfig);
+            } catch (error) {
+                console.error('Chart creation failed:', error);
+            }
+        };
+
+        document.getElementById('add-chart').addEventListener('click', function() {
+            const field = document.getElementById('data-field-selector').value;
+            const existingChart = document.querySelector(`.chart-card[data-field="${field}"]`);
+            if (existingChart) {
+                alert('Chart for this field already exists.');
+                return;
+            }
+            const chartContainer = document.getElementById('chart-container');
+            const chartWrapper = document.createElement('div');
+            chartWrapper.classList.add('chart-wrapper', 'chart-card', 'bg-base-100', 'shadow-md', 'p-4', 'relative');
+            chartWrapper.setAttribute('data-field', field);
+            const chartTitle = document.createElement('div');
+            chartTitle.classList.add('text-xl', 'font-bold', 'mb-2');
+            chartTitle.textContent = field.charAt(0).toUpperCase() + field.slice(1);
+            const closeButton = document.createElement('button');
+            closeButton.classList.add('btn', 'btn-sm', 'btn-ghost', 'absolute', 'top-2', 'right-2');
+            closeButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            `;
+            const chartCanvas = document.createElement('canvas');
+            chartCanvas.classList.add('chart-canvas');
+            const loadingSpinner = document.createElement('div');
+            loadingSpinner.classList.add('absolute', 'top-0', 'left-0', 'w-full', 'h-full', 'flex', 'items-center', 'justify-center', 'shimmer');
+            loadingSpinner.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+            chartWrapper.appendChild(chartTitle);
+            chartWrapper.appendChild(closeButton);
+            chartWrapper.appendChild(chartCanvas);
+            chartWrapper.appendChild(loadingSpinner);
+            chartContainer.appendChild(chartWrapper);
+
+            closeButton.addEventListener('click', () => {
+                chartWrapper.remove();
+            });
+
+            setTimeout(() => {
+                updateChart(field, chartCanvas);
+                loadingSpinner.remove();
+            }, 1000);
+
+            // Update chart data if sections are updated
+            document.querySelectorAll('.priority-btn, .start-date, .end-date, .add-range, .remove-section, .tag-input').forEach(element => {
+                element.addEventListener('change', () => updateChart(field, chartCanvas));
+                element.addEventListener('input', () => updateChart(field, chartCanvas));
+            });
+        });
+
+        // Pre-populate with 3 sections on page load
+        window.onload = function() {
+            addSection('Section 1', '2023-01-01', '2023-02-01', 'High');
+            addSection('Section 2', '2023-03-01', '2023-04-01', 'Medium');
+            addSection('Section 3', '2023-05-01', '2023-06-01', 'Urgent');
+            updateStats();
+
+            // Add default overview chart
+            const overviewChartWrapper = document.createElement('div');
+            overviewChartWrapper.classList.add('chart-wrapper', 'chart-card', 'bg-base-100', 'shadow-md', 'p-4', 'relative');
+            overviewChartWrapper.setAttribute('data-field', 'overview');
+            const overviewChartTitle = document.createElement('div');
+            overviewChartTitle.classList.add('text-xl', 'font-bold', 'mb-2');
+            overviewChartTitle.textContent = 'Overview';
+            const overviewChartCanvas = document.createElement('canvas');
+            overviewChartCanvas.classList.add('chart-canvas');
+            const overviewLoadingSpinner = document.createElement('div');
+            overviewLoadingSpinner.classList.add('absolute', 'top-0', 'left-0', 'w-full', 'h-full', 'flex', 'items-center', 'justify-center', 'shimmer');
+            overviewLoadingSpinner.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+            overviewChartWrapper.appendChild(overviewChartTitle);
+            overviewChartWrapper.appendChild(overviewChartCanvas);
+            overviewChartWrapper.appendChild(overviewLoadingSpinner);
+            document.getElementById('chart-container').appendChild(overviewChartWrapper);
+
+            setTimeout(() => {
+                updateChart('overview', overviewChartCanvas);
+                overviewLoadingSpinner.remove();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
