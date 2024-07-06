@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width= 100%, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Journey Map</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,30 +19,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        html, body {
-            height: auto;
-            margin: 0;
-            background-color: #f3f4f6;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        .container {
-            max-width: 100%;
-            padding: 16px;
-            margin: 0 auto;
-            flex-grow: 1;
-        }
-        .shimmer {
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
+      
         .chart-card {
             min-width: 25vw;
             flex-grow: 1;
@@ -54,6 +31,13 @@
         .chart-canvas {
             height: calc(100% - 24px); /* Adjust height to account for padding */
             border-radius: 16px;
+        }
+        .container {
+            max-width: 100%;
+            padding: 16px;
+            margin: 0 auto;
+            min-height: 100vh;
+            height: auto;
         }
         .chart-container {
             display: flex;
@@ -82,7 +66,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-base-200 text-base-content">
     <div class="container">
         <div class="navbar bg-base-100 mb-4">
             <h1 id="main-title" contenteditable="true" class="btn btn-ghost text-4xl lg:text-5xl">Project Title</h1>
@@ -357,15 +341,6 @@
             const inputRangeCount = section.querySelector('.input-range-count');
             const tagInput = section.querySelector('.tag-input');
 
-            const updateChartForField = () => {
-                const field = document.getElementById('data-field-selector').value;
-                const chartWrapper = document.querySelector(`.chart-card[data-field="${field}"]`);
-                if (chartWrapper) {
-                    const chartCanvas = chartWrapper.querySelector('canvas');
-                    updateChart(field, chartCanvas);
-                }
-            };
-
             priorityOptions.forEach(option => {
                 option.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -374,7 +349,6 @@
                     priorityBtn.className = `btn w-full dropdown-toggle priority-btn ${priorityColors[newPriority]}`;
                     priorityBtn.setAttribute('data-priority', newPriority);
                     updateStats();
-                    updateChartForField();
                 });
             });
 
@@ -382,7 +356,6 @@
                 const count = section.querySelectorAll('.range-container > div').length;
                 inputRangeCount.textContent = count;
                 updateStats();
-                updateChartForField();
             };
 
             addDetailsBtn.addEventListener('click', function() {
@@ -405,17 +378,11 @@
                         reader.readAsDataURL(file);
                     }
                 }
-                updateChartForField();
             });
-
-            section.querySelector('.start-date').addEventListener('change', updateChartForField);
-            section.querySelector('.end-date').addEventListener('change', updateChartForField);
-            tagInput.addEventListener('input', updateChartForField);
 
             section.querySelector('.remove-section').addEventListener('click', function() {
                 journeyMap.removeChild(section);
                 updateStats();
-                updateChartForField();
             });
 
             section.querySelector('.add-range').addEventListener('click', function() {
@@ -443,14 +410,12 @@
                 section.classList.add('completed');
                 section.style.display = 'none';
                 updateStats();
-                updateChartForField();
             });
 
             section.querySelector('.archive').addEventListener('click', function() {
                 section.classList.add('archived');
                 section.style.display = 'none';
                 updateStats();
-                updateChartForField();
             });
 
             updateInputRangeCount();
@@ -645,9 +610,8 @@
             }, 1000);
 
             // Update chart data if sections are updated
-            document.querySelectorAll('.priority-btn, .start-date, .end-date, .add-range, .remove-section, .tag-input').forEach(element => {
+            document.querySelectorAll('.priority-btn, .start-date, .end-date, .add-range, .remove-section').forEach(element => {
                 element.addEventListener('change', () => updateChart(field, chartCanvas));
-                element.addEventListener('input', () => updateChart(field, chartCanvas));
             });
         });
 
