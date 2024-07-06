@@ -217,6 +217,7 @@
                 'High': 0,
                 'Urgent': 0,
                 'Immediate': 0,
+                'Low': 0,
                 'totalCards': sections.length,
                 'totalRanges': 0,
                 'Completed': 0,
@@ -240,7 +241,7 @@
 
             document.getElementById('critical-count').textContent = stats['Critical'];
             document.getElementById('high-count').textContent = stats['High'];
-            document.getElementById('urgent-count').textContent = stats['Urgent'];
+            document.getElementById('low-count').textContent = stats['Low'];
             document.getElementById('immediate-count').textContent = stats['Immediate'];
             document.getElementById('total-cards').textContent = stats['totalCards'];
             document.getElementById('total-ranges').textContent = stats['totalRanges'];
@@ -629,7 +630,7 @@
             }, 1000);
 
             // Update chart data if sections are updated
-            document.querySelectorAll('.priority-btn, .start-date, .end-date, .add-range, .remove-section').forEach(element => {
+            document.querySelectorAll('.priority-btn, .start-date, .end-date, .add-range, .remove-section, .tag-input').forEach(element => {
                 element.addEventListener('change', () => updateChart(field, chartCanvas));
                 element.addEventListener('input', () => updateChart(field, chartCanvas));
             });
