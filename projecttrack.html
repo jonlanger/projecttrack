@@ -64,6 +64,19 @@
             margin-top: 16px;
             border-radius: 16px;
         }
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .stat-card {
+            min-width: 175px;
+            flex-grow: 1;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: #fff;
+        }
     </style>
 </head>
 <body class="bg-base-200 text-base-content">
@@ -90,8 +103,8 @@
             </div>
         </div>
         <div id="stats-card" class="hidden mb-6">
-            <div class="stats stats-vertical lg:stats-horizontal shadow flex-wrap">
-                <div class="stat cursor-pointer filter-stat" data-filter="Critical">
+            <div class="stats-container">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="Critical">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -100,7 +113,7 @@
                     <div class="stat-title">Critical</div>
                     <div class="stat-value" id="critical-count">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="High">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="High">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -109,7 +122,7 @@
                     <div class="stat-title">High</div>
                     <div class="stat-value" id="high-count">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="Low">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="Low">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -118,7 +131,7 @@
                     <div class="stat-title">Low</div>
                     <div class="stat-value" id="low-count">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="Immediate">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="Immediate">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -127,7 +140,25 @@
                     <div class="stat-title">Immediate</div>
                     <div class="stat-value" id="immediate-count">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="totalCards">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="Top Priority">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Top Priority</div>
+                    <div class="stat-value" id="top-priority-count">0</div>
+                </div>
+                <div class="stat-card cursor-pointer filter-stat" data-filter="Non-Urgent">
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-title">Non-Urgent</div>
+                    <div class="stat-value" id="non-urgent-count">0</div>
+                </div>
+                <div class="stat-card cursor-pointer filter-stat" data-filter="totalCards">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -136,7 +167,7 @@
                     <div class="stat-title">Total Cards</div>
                     <div class="stat-value" id="total-cards">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="totalRanges">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="totalRanges">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -145,7 +176,7 @@
                     <div class="stat-title">Total Ranges</div>
                     <div class="stat-value" id="total-ranges">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="completed">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="completed">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -154,7 +185,7 @@
                     <div class="stat-title">Completed</div>
                     <div class="stat-value" id="completed-count">0</div>
                 </div>
-                <div class="stat cursor-pointer filter-stat" data-filter="archived">
+                <div class="stat-card cursor-pointer filter-stat" data-filter="archived">
                     <div class="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
@@ -218,6 +249,8 @@
                 'Urgent': 0,
                 'Immediate': 0,
                 'Low': 0,
+                'Top Priority': 0,
+                'Non-Urgent': 0,
                 'totalCards': sections.length,
                 'totalRanges': 0,
                 'Completed': 0,
@@ -243,6 +276,8 @@
             document.getElementById('high-count').textContent = stats['High'];
             document.getElementById('low-count').textContent = stats['Low'];
             document.getElementById('immediate-count').textContent = stats['Immediate'];
+            document.getElementById('top-priority-count').textContent = stats['Top Priority'];
+            document.getElementById('non-urgent-count').textContent = stats['Non-Urgent'];
             document.getElementById('total-cards').textContent = stats['totalCards'];
             document.getElementById('total-ranges').textContent = stats['totalRanges'];
             document.getElementById('completed-count').textContent = stats['Completed'];
@@ -253,6 +288,10 @@
             if (overviewChart) {
                 updateChart('overview', overviewChart.querySelector('canvas'));
             }
+        };
+
+        const createChart = (chartCanvas, chartConfig) => {
+            return new Chart(chartCanvas, chartConfig);
         };
 
         const addSection = (title = 'New Section', startDate = '', endDate = '', priority = 'Critical') => {
@@ -309,7 +348,7 @@
                         <div class="label">
                             <span class="label-text">Description</span>
                         </div>
-                        <textarea class="textarea textarea-bordered w-full" placeholder="Type here"></textarea>
+                        <textarea class="textarea textarea-bordered w-full description-input" placeholder="Type here"></textarea>
                     </label>
                     <label class="form-control w-full">
                         <div class="label">
@@ -340,15 +379,16 @@
             const fileSelector = section.querySelector('.file-selector');
             const uploadedImagesContainer = section.querySelector('.uploaded-images-container');
             const inputRangeCount = section.querySelector('.input-range-count');
+            const descriptionInput = section.querySelector('.description-input');
             const tagInput = section.querySelector('.tag-input');
 
             const updateChartForField = () => {
-                const field = document.getElementById('data-field-selector').value;
-                const chartWrapper = document.querySelector(`.chart-card[data-field="${field}"]`);
-                if (chartWrapper) {
+                const chartWrappers = document.querySelectorAll('.chart-card');
+                chartWrappers.forEach(chartWrapper => {
+                    const field = chartWrapper.getAttribute('data-field');
                     const chartCanvas = chartWrapper.querySelector('canvas');
                     updateChart(field, chartCanvas);
-                }
+                });
             };
 
             priorityOptions.forEach(option => {
@@ -436,6 +476,7 @@
 
             section.querySelector('.start-date').addEventListener('change', updateChartForField);
             section.querySelector('.end-date').addEventListener('change', updateChartForField);
+            descriptionInput.addEventListener('input', updateChartForField);
             tagInput.addEventListener('input', updateChartForField);
 
             updateInputRangeCount();
@@ -447,6 +488,7 @@
 
         document.getElementById('theme-selector').addEventListener('change', function() {
             document.documentElement.setAttribute('data-theme', this.value);
+            updateChartsTheme(this.value);
         });
 
         document.getElementById('search-bar').addEventListener('input', function() {
@@ -525,7 +567,55 @@
             chartsCard.classList.toggle('hidden');
         });
 
-        const updateChart = (field, chartCanvas) => {
+        const updateChartsTheme = (theme) => {
+            const chartWrappers = document.querySelectorAll('.chart-card');
+            chartWrappers.forEach(chartWrapper => {
+                const field = chartWrapper.getAttribute('data-field');
+                const chartCanvas = chartWrapper.querySelector('canvas');
+                updateChart(field, chartCanvas, theme);
+            });
+        };
+
+        const getChartConfig = (field, labels, chartData, theme) => {
+            const themeColors = {
+                light: 'rgba(75, 192, 192, 0.2)',
+                dark: 'rgba(255, 99, 132, 0.2)',
+                cupcake: 'rgba(153, 102, 255, 0.2)',
+                bumblebee: 'rgba(255, 205, 86, 0.2)',
+                emerald: 'rgba(75, 192, 192, 0.2)',
+                corporate: 'rgba(54, 162, 235, 0.2)',
+                synthwave: 'rgba(255, 159, 64, 0.2)',
+                retro: 'rgba(255, 206, 86, 0.2)',
+                cyberpunk: 'rgba(255, 99, 132, 0.2)',
+                valentine: 'rgba(153, 102, 255, 0.2)',
+            };
+
+            return {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: field.charAt(0).toUpperCase() + field.slice(1),
+                        data: chartData,
+                        backgroundColor: themeColors[theme],
+                        borderColor: themeColors[theme].replace('0.2', '1'),
+                        borderWidth: 1,
+                        borderRadius: 10,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+        };
+
+        const updateChart = (field, chartCanvas, theme = document.documentElement.getAttribute('data-theme')) => {
             let chartData = [];
             let labels = [];
 
@@ -550,7 +640,7 @@
             });
 
             if (field === 'overview') {
-                const types = ['critical', 'high', 'urgent', 'immediate', 'topPriority', 'medium', 'important', 'low', 'nonUrgent', 'deferred'];
+                const types = ['critical', 'high', 'urgent', 'immediate', 'top priority', 'medium', 'important', 'low', 'non-urgent', 'deferred'];
                 labels = types.map(type => type.charAt(0).toUpperCase() + type.slice(1));
                 chartData = labels.map(label => chartData.filter(d => d.type === label.toLowerCase()).length);
             } else {
@@ -558,34 +648,15 @@
                 chartData = labels.map(label => chartData.filter(d => (d.startDate + ' to ' + d.endDate) === label).reduce((acc, curr) => acc + curr.value, 0));
             }
 
-            const chartConfig = {
-                type: 'bar',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: field.charAt(0).toUpperCase() + field.slice(1),
-                        data: chartData,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            };
+            const chartConfig = getChartConfig(field, labels, chartData, theme);
 
-            try {
-                new Chart(chartCanvas, chartConfig);
-            } catch (error) {
-                console.error('Chart creation failed:', error);
+            // Destroy existing chart instance if it exists
+            if (chartCanvas.chart) {
+                chartCanvas.chart.destroy();
             }
+
+            // Create new chart instance
+            chartCanvas.chart = createChart(chartCanvas, chartConfig);
         };
 
         document.getElementById('add-chart').addEventListener('click', function() {
