@@ -70,12 +70,11 @@
             gap: 16px;
         }
         .stat-card {
-            min-width: 175px;
+            min-width: 150px;
             flex-grow: 1;
             border-radius: 16px;
             padding: 16px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            
         }
     </style>
 </head>
@@ -104,95 +103,65 @@
         </div>
         <div id="stats-card" class="hidden mb-6">
             <div class="stats-container">
-                <div class="stat-card cursor-pointer filter-stat" data-filter="Critical">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="Critical">
+                    <div class="stat">
+                        <div class="stat-title">Critical</div>
+                        <div class="stat-value" id="critical-count">0</div>
                     </div>
-                    <div class="stat-title">Critical</div>
-                    <div class="stat-value" id="critical-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="High">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="High">
+                    <div class="stat">
+                        <div class="stat-title">High</div>
+                        <div class="stat-value" id="high-count">0</div>
                     </div>
-                    <div class="stat-title">High</div>
-                    <div class="stat-value" id="high-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="Low">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="Low">
+                    <div class="stat">
+                        <div class="stat-title">Low</div>
+                        <div class="stat-value" id="low-count">0</div>
                     </div>
-                    <div class="stat-title">Low</div>
-                    <div class="stat-value" id="low-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="Immediate">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="Immediate">
+                    <div class="stat">
+                        <div class="stat-title">Immediate</div>
+                        <div class="stat-value" id="immediate-count">0</div>
                     </div>
-                    <div class="stat-title">Immediate</div>
-                    <div class="stat-value" id="immediate-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="Top Priority">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="Top Priority">
+                    <div class="stat">
+                        <div class="stat-title">Top Priority</div>
+                        <div class="stat-value" id="top-priority-count">0</div>
                     </div>
-                    <div class="stat-title">Top Priority</div>
-                    <div class="stat-value" id="top-priority-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="Non-Urgent">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="Non-Urgent">
+                    <div class="stat">
+                        <div class="stat-title">Non-Urgent</div>
+                        <div class="stat-value" id="non-urgent-count">0</div>
                     </div>
-                    <div class="stat-title">Non-Urgent</div>
-                    <div class="stat-value" id="non-urgent-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="totalCards">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="totalCards">
+                    <div class="stat">
+                        <div class="stat-title">Total Cards</div>
+                        <div class="stat-value" id="total-cards">0</div>
                     </div>
-                    <div class="stat-title">Total Cards</div>
-                    <div class="stat-value" id="total-cards">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="totalRanges">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="totalRanges">
+                    <div class="stat">
+                        <div class="stat-title">Total Ranges</div>
+                        <div class="stat-value" id="total-ranges">0</div>
                     </div>
-                    <div class="stat-title">Total Ranges</div>
-                    <div class="stat-value" id="total-ranges">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="completed">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="completed">
+                    <div class="stat">
+                        <div class="stat-title">Completed</div>
+                        <div class="stat-value" id="completed-count">0</div>
                     </div>
-                    <div class="stat-title">Completed</div>
-                    <div class="stat-value" id="completed-count">0</div>
                 </div>
-                <div class="stat-card cursor-pointer filter-stat" data-filter="archived">
-                    <div class="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="stats shadow stat-card cursor-pointer filter-stat" data-filter="archived">
+                    <div class="stat">
+                        <div class="stat-title">Archived</div>
+                        <div class="stat-value" id="archived-count">0</div>
                     </div>
-                    <div class="stat-title">Archived</div>
-                    <div class="stat-value" id="archived-count">0</div>
                 </div>
             </div>
         </div>
